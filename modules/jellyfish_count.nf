@@ -4,6 +4,7 @@ process jellyfishCount{
   conda params.jellyfishCount.conda
   cpus params.resources.jellyfishCount.cpus
   memory params.resources.jellyfishCount.mem
+  maxForks params.resources.maxForks
   queue params.resources.jellyfishCount.queue 
   //array params.resources.array_size
   clusterOptions params.resources.jellyfishCount.clusterOptions
