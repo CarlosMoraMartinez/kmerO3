@@ -25,4 +25,6 @@ sudo docker run --rm \
   jellyfish count -m 21 -s 3G --bf-size 100G -t 8 -C /data/test_data/C6368_1.filt_cut1e6.fastq -o /data/test_data/C6368_1b.jf
 
 
-  sudo /usr/local/bin/nextflow run main.nf -c config/test.config 
+  sudo /usr/local/bin/nextflow run main.nf -c config/test.config -with-docker
+
+  sudo /home/servidor/bin/nextflow run main.nf -c config/corals_serv3.config -with-docker
