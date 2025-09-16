@@ -11,19 +11,20 @@ process jellyfishCount{
   maxRetries 10
   publishDir "$results_dir/mg01_jellyfishcount", mode: 'symlink'
   input:
-  val index
-  val options
+  val k
   tuple(val(illumina_id), path(fastq))
   
   output:
-  tuple(val(illumina_id), path('*.bam'), path('*.err'))
+  tuple(val(illumina_id), path('*.jf'), path('*.txt.gz'))
   
   shell:
   '''
-  ## bowtie2 mapping against host sequence database, keep both aligned and unaligned reads (paired-end reads)
-  outname=!{illumina_id}'.bam'
-  logname=!{illumina_id}'.bowtie2.err'
-  bowtie2 -x !{index} --threads !{params.resources.jellyfishCount.cpus} !{options} -1 !{fastq[0]} -2 !{fastq[1]} 2> $logname | \
-    samtools view -bSh - -o $outname 
+  jellyfish count -m !{k} !{params.jellyfishCount.args} \
+    -o !{illumina_id}.jf -t !{task.cpus} \
+    -F 2 <(zcat !{fastq[0]}) <(zcat !{fastq[1]})
+
+  jellyfish dump -c !{illumina_id}.jf -o !{illumina_id}.txt
+  gzip !{illumina_id}.txt
+
   '''
 }
